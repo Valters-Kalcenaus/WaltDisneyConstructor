@@ -10,7 +10,7 @@ print('Asteroid processing service')
 # Initiating and reading config values
 print('Loading configuration from file')
 
-# 
+# key input and url
 nasa_api_key = "AWi2JoYJ7Wr3Dbvqb3H2E0JwbwpDYqzeHvEsPkvC"
 nasa_api_url = "https://api.nasa.gov/neo/"
 
@@ -19,10 +19,10 @@ dt = datetime.now()
 request_date = str(dt.year) + "-" + str(dt.month).zfill(2) + "-" + str(dt.day).zfill(2)  
 print("Generated today's date: " + str(request_date))
 
-
+#print request info
 print("Request url: " + str(nasa_api_url + "rest/v1/feed?start_date=" + request_date + "&end_date=" + request_date + "&api_key=" + nasa_api_key))
 r = requests.get(nasa_api_url + "rest/v1/feed?start_date=" + request_date + "&end_date=" + request_date + "&api_key=" + nasa_api_key)
-
+#prints additional info
 print("Response status code: " + str(r.status_code))
 print("Response headers: " + str(r.headers))
 print("Response content: " + str(r.text))
@@ -37,7 +37,7 @@ if r.status_code == 200:
 	if 'element_count' in json_data:
 		ast_count = int(json_data['element_count'])
 		print("Asteroid count today: " + str(ast_count))
-
+# divides hazardous and safe asteroids
 		if ast_count > 0:
 			for val in json_data['near_earth_objects'][request_date]:
 				if 'name' and 'nasa_jpl_url' and 'estimated_diameter' and 'is_potentially_hazardous_asteroid' and 'close_approach_data' in val:
@@ -73,19 +73,19 @@ if r.status_code == 200:
 								tmp_ast_miss_dist = -1
 						else:
 							tmp_ast_close_appr_ts = -1
-							tmp_ast_close_appr_dt_utc = "1969-12-31 23:59:59"
+							tmp_ast_close_appr_dt_utc = "1969-12-31 23:59:59" #in case of inaccurate data, these paramaters are given
 							tmp_ast_close_appr_dt = "1969-12-31 23:59:59"
 					else:
 						print("No close approach data in message")
 						tmp_ast_close_appr_ts = 0
-						tmp_ast_close_appr_dt_utc = "1970-01-01 00:00:00"
+						tmp_ast_close_appr_dt_utc = "1970-01-01 00:00:00" #if no close approach data, then these parameters are given as well
 						tmp_ast_close_appr_dt = "1970-01-01 00:00:00"
 						tmp_ast_speed = -1
 						tmp_ast_miss_dist = -1
 
-					print("------------------------------------------------------- >>")
-					print("Asteroid name: " + str(tmp_ast_name) + " | INFO: " + str(tmp_ast_nasa_jpl_url) + " | Diameter: " + str(tmp_ast_diam_min) + " - " + str(tmp_ast_diam_max) + " km | Hazardous: " + str(tmp_ast_hazardous))
-					print("Close approach TS: " + str(tmp_ast_close_appr_ts) + " | Date/time UTC TZ: " + str(tmp_ast_close_appr_dt_utc) + " | Local TZ: " + str(tmp_ast_close_appr_dt))
+					print("------------------------------------------------------- >>") #prints arrow
+					print("Asteroid name: " + str(tmp_ast_name) + " | INFO: " + str(tmp_ast_nasa_jpl_url) + " | Diameter: " + str(tmp_ast_diam_min) + " - " + str(tmp_ast_diam_max) + " km | Hazardous: " + str(tmp_ast_hazardous)) #prints name, diamater, info + distance
+					print("Close approach TS: " + str(tmp_ast_close_appr_ts) + " | Date/time UTC TZ: " + str(tmp_ast_close_appr_dt_utc) + " | Local TZ: " + str(tmp_ast_close_appr_dt)) #prints time related data for hazardous asteroids
 					print("Speed: " + str(tmp_ast_speed) + " km/h" + " | MISS distance: " + str(tmp_ast_miss_dist) + " km")
 					
 					# Adding asteroid data to the corresponding array
@@ -95,9 +95,9 @@ if r.status_code == 200:
 						ast_safe.append([tmp_ast_name, tmp_ast_nasa_jpl_url, tmp_ast_diam_min, tmp_ast_diam_max, tmp_ast_close_appr_ts, tmp_ast_close_appr_dt_utc, tmp_ast_close_appr_dt, tmp_ast_speed, tmp_ast_miss_dist])
 
 		else:
-			print("No asteroids are going to hit earth today")
+			print("No asteroids are going to hit earth today") #prints the info, that all is good.
 
-	print("Hazardous asteorids: " + str(len(ast_hazardous)) + " | Safe asteroids: " + str(len(ast_safe)))
+	print("Hazardous asteorids: " + str(len(ast_hazardous)) + " | Safe asteroids: " + str(len(ast_safe))) #prints the count of hazardous and the count of safe asteroids
 
 	if len(ast_hazardous) > 0:
 
@@ -108,9 +108,9 @@ if r.status_code == 200:
 			print(str(asteroid[6]) + " " + str(asteroid[0]) + " " + " | more info: " + str(asteroid[1]))
 
 		ast_hazardous.sort(key = lambda x: x[8], reverse=False)
-		print("Closest passing distance is for: " + str(ast_hazardous[0][0]) + " at: " + str(int(ast_hazardous[0][8])) + " km | more info: " + str(ast_hazardous[0][1]))
+		print("Closest passing distance is for: " + str(ast_hazardous[0][0]) + " at: " + str(int(ast_hazardous[0][8])) + " km | more info: " + str(ast_hazardous[0][1])) #closest passing distance for hazardous 
 	else:
-		print("No asteroids close passing earth today")
+		print("No asteroids close passing earth today") #prints info if no close asteroids passing
 
 else:
-	print("Unable to get response from API. Response code: " + str(r.status_code) + " | content: " + str(r.text))
+	print("Unable to get response from API. Response code: " + str(r.status_code) + " | content: " + str(r.text)) #error message
