@@ -1,5 +1,7 @@
 import os
-COUNTER_PATH = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop') + 'scriptUseCounter.txt'
+from typing import Counter
+COUNTER_PATH = os.path.expanduser("~/my_secret_files") + "/scriptUseCounter.txt"
+print (COUNTER_PATH)
 
 
 def operation_counter():
@@ -13,3 +15,5 @@ def operation_counter():
   else:
     with open(COUNTER_PATH, 'w') as f:
       f.write('1')
+
+operation_counter()
