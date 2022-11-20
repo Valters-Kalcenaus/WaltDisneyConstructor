@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
 	# Loading logging configuration
 	with open('./log_worker.yaml', 'r') as stream:
-	    log_config = yaml.safe_load(stream)
+		log_config = yaml.safe_load(stream)
 
 	logging.config.dictConfig(log_config)
 
