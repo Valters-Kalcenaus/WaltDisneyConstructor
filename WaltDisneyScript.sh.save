@@ -39,12 +39,15 @@ python_exec_loc=$(which python3)
 if [ $? -eq 0 ]; then echo "OK"; else echo "Problem getting python3 exec location"; exit 1; fi
 echo "$python_exec_loc"
 echo "------------------------------------------------"
-
 echo "Running config tests"
 $python_exec_loc test_config.py
 if [ $? -eq 0 ]; then echo "OK"; else echo "Configuration test FAILED"; exit 1; fi
 echo "------------------------------------------------"
 
+echo "Running DB migrations"
+$python_exec_loc migrate_db.py
+if [ $? -eq 0 ]; then echo "OK"; else echo "DB migration FAILED"; exit 1; fi
+echo "------------------------------------------------"
 
 echo "Running asteroid worker tests"
 $python_exec_loc test_worker.py
@@ -52,11 +55,5 @@ if [ $? -eq 0 ]; then echo "OK"; else echo "Worker test FAILED"; exit 1; fi
 echo "------------------------------------------------"
 
 echo "ALL SET UP! YOU ARE READY TO CODE"
-
-echo "counting use of bash script on this device"
-$python_exec_loc test_counter.py
-if [ $? -eq 0 ]; then echo "OK"; else echo "Worker test FAILED"; exit 1; fi
-echo "------------------------------------------------"
-
 echo "to start the program, execute:"
 echo "$python_exec_loc worker_2_db.py"
