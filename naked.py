@@ -14,7 +14,6 @@ from mysql.connector import Error
 
 from datetime import datetime
 
-
 # Loading logging configuration
 with open('./log_worker.yaml', 'r') as stream:
 	    log_config = yaml.safe_load(stream)
@@ -23,12 +22,7 @@ logging.config.dictConfig(log_config)
 
 	# Creating logger
 logger = logging.getLogger('root')
-
-
 logger.info('Asteroid processing service')
-
-
-
 
 # Initiating and reading config values
 logger.info('Loading configuration from file')
@@ -44,7 +38,6 @@ try:
 	mysql_config_mysql_db = config.get('mysql_config', 'mysql_db')
 	mysql_config_mysql_user = config.get('mysql_config', 'mysql_user')
 	mysql_config_mysql_pass = config.get('mysql_config', 'mysql_pass')
-
 except:
 	logger.exception('')
 	logger.info('DONE')
